@@ -1,0 +1,30 @@
+"""driver.find_element_by_xpath('//*[@id="ui-datepicker-div"]/div/a[1]/span').click()"""   #goes 1 month back
+
+"""
+for day in month:
+    if day.get_attribute("class") == "ui-state-default":
+        days.append(day)                                                #creates a list with all the days of the month up until now as webElement objects
+for day in days:
+    calendar = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/img')
+    calendar.click()
+    title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
+    print(title)
+"""
+"""    
+for row in range(5,0,-1):
+    for collumn in range(7,0,-1):
+        try:
+            calendar = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/img')
+            calendar.click()
+            day_xpath = '//*[@id="ui-datepicker-div"]/table/tbody/tr['+str(row)+']/td['+str(collumn)+']/a'
+            day_but = driver.find_element_by_xpath(day_xpath)
+            day_but.click()
+        except NoSuchElementException:
+            break
+        except ElementClickInterceptedException:
+            print("Element not clickable at row %s, collumn %s for some reason"%(row,collumn))
+            continue
+        sleep(2)
+
+print("Changed a lot of pages successfully!")
+"""
