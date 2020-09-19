@@ -6,7 +6,6 @@ def save_scores(filename):
     chromedriver = "C:\chromedriver\chromedriver.exe";                      #path to the chromedriver executable(only needed if using chrome)
     driver = webdriver.Chrome(chromedriver);                                #for Firefox this would just be webdriver.Firefox()
     driver.get("https://virtualsports.opap.gr/virtual-results");            #opens a window in the browser with this page
-
     scores, o1, o2 = [], [], [];
     j=1;
     while 1:
@@ -23,7 +22,7 @@ def save_scores(filename):
             break
     driver.close();                                                         #close browser ater scraping is done
     num_scores = len(scores);
-    print("Scraping finished after returning " +str(num_scores) + " scores.");
+    print("\nScraping finished after returning " +str(num_scores) + " scores.");
 
 
     myfile = open(filename,"w");
@@ -56,3 +55,4 @@ def read_scores(filename):
 
     myfile.close();
     return [array1,array2];
+
