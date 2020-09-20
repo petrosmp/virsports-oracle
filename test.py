@@ -11,6 +11,7 @@ def get_scores_per_month(given_month):
     from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
     from time import sleep
     from datetime import date
+    from scraper import scrape_days_scores
 
     today_month = int(str(date.today())[5:7])
     if given_month > today_month:                                       #check if given month is valid
@@ -95,6 +96,7 @@ def get_scores_per_month(given_month):
                             print("clicked day %s [101] (everything that happens from now on will be on this day's page)"%(day_num))
                             day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
                             print("this data was taken from the %s of %s: %s  [101]"%(day_num, given_month_name, day_title))
+                            scrape_days_scores(driver)
                             if int(day_title[:2]) == 1:
                                 break
                         except NoSuchElementException:
@@ -117,6 +119,7 @@ def get_scores_per_month(given_month):
                             print("clicked day %s [102] (everything that happens from now on will be on this day's page)"%(day_num))
                             day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
                             print("this data was taken from the %s of %s: %s  [102]"%(day_num, given_month_name, day_title))
+                            scrape_days_scores(driver)
                             if int(day_title[:2]) == 1:
                                 break
                         except NoSuchElementException:
@@ -160,6 +163,7 @@ def get_scores_per_month(given_month):
                         print("clicled day %s [201] (everything that happens from now on will be on this day's page)"%(day_num))
                         day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
                         print("this data was taken from the %s of current month: %s  [201]"%(day_num, day_title))
+                        scrape_days_scores(driver)
                         if int(day_title[:2]) == 1:
                             break
                     except NoSuchElementException:
@@ -195,6 +199,7 @@ def get_scores_per_month(given_month):
                         print("clicked day %s [202] (everything that happens from now on will be on this day's page)"%(day_num))
                         day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
                         print("this data was taken from the %s of current month: %s  [202]"%(day_num, day_title))
+                        scrape_days_scores(driver)
                         if int(day_title[:2]) == 1:
                             break
                     except NoSuchElementException:
