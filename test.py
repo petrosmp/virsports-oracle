@@ -3,7 +3,7 @@ Imports and driver settings are done inside the functions to allow for usage in 
 """
 
 
-def get_scores_per_month(given_month):
+def get_scores_per_month(given_month, verbose):
     """
     Circles the calendar for given month (or for current month if input is 0).
     """
@@ -65,68 +65,85 @@ def get_scores_per_month(given_month):
                 last_day = 28
             if given_month == 4 or given_month == 6 or given_month  ==  9 or given_month == 11:
                 last_day = 30;
-            print("%s's last day is the %i"%(given_month_name, last_day))
+            if verbose:
+                print("%s's last day is the %i"%(given_month_name, last_day))
             row, collumn = 1,1
             for day in month:
-                print("Parsing day: %s of current calendar"%(day.text))
+                if verbose:
+                    print("Parsing day: %s of current calendar"%(day.text))
                 if day.text == str(last_day) and row != 1:#change to whatever you want to search (MUST BE STRING!!!)
-                    print("Found last day of the month (" + day.text + ") at row %i, collumn %i"%(row,collumn))
+                    if verbose:
+                        print("Found last day of the month (" + day.text + ") at row %i, collumn %i"%(row,collumn))
                     break
                 collumn += 1;
                 if collumn == 8:
                     row+=1
                     collumn = 1;
-            #circle the calendar 
-            print("Starting to circle the calendar")
+            #circle the calendar
+            if verbose: 
+                print("Starting to circle the calendar")
             for r in range(row,0,-1):
                 if r == row:                                                        #when on the row where today is, start from today
                     for c in range(collumn,0,-1):
-                        print("New Iteration    row: %i collumn %i [101]"%(r,c))
+                        if verbose:
+                            print("New Iteration    row: %i collumn %i [101]"%(r,c))
                         try:
                             if c != collumn:
                                 calendar.click()
-                                print("clicked calendar [101.555]")
+                                if verbose:
+                                    print("clicked calendar [101.555]")
                             else:
-                                print("didnt need to click calendar [101.000]")
+                                if verbose:
+                                    print("didnt need to click calendar [101.000]")
                             sleep(1)
                             day_xpath = '//*[@id="ui-datepicker-div"]/table/tbody/tr['+str(r)+']/td['+str(c)+']/a'
                             day = driver.find_element_by_xpath(day_xpath)
                             day_num = day.text
                             day.click()
-                            print("clicked day %s [101] (everything that happens from now on will be on this day's page)"%(day_num))
+                            if verbose:
+                                print("clicked day %s [101] (everything that happens from now on will be on this day's page)"%(day_num))
                             day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
-                            print("this data was taken from the %s of %s: %s  [101]"%(day_num, given_month_name, day_title))
-                            scrape_days_scores(driver)
+                            if verbose:
+                                print("this data was taken from the %s of %s: %s  [101]"%(day_num, given_month_name, day_title))
+                            scrape_days_scores(driver, verbose)
                             if int(day_title[:2]) == 1:
                                 break
                         except NoSuchElementException:
-                            print("Stopped at " + day.text + "with NoSuchElementException [101]")
+                            if verbose:
+                                print("Stopped at " + day.text + "with NoSuchElementException [101]")
                             break
                         except ElementClickInterceptedException:
-                            print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [101]"%(r,c))
+                            if verbose:
+                                print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [101]"%(r,c))
                             continue
                         sleep(2)
                 else:                                                               #when on every other row, start from the end (7th collumn)
                     for c in range(7,0,-1):
                         try:
-                            print("New Iteration    row: %i collumn %i [102]"%(r,c))
+                            if verbose:
+                                print("New Iteration    row: %i collumn %i [102]"%(r,c))
                             calendar.click()
-                            print("clicked calendar [102]")
+                            if verbose:
+                                print("clicked calendar [102]")
                             day_xpath = '//*[@id="ui-datepicker-div"]/table/tbody/tr['+str(r)+']/td['+str(c)+']/a'
                             day = driver.find_element_by_xpath(day_xpath)
                             day_num = day.text
                             day.click()
-                            print("clicked day %s [102] (everything that happens from now on will be on this day's page)"%(day_num))
+                            if verbose:
+                                print("clicked day %s [102] (everything that happens from now on will be on this day's page)"%(day_num))
                             day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
-                            print("this data was taken from the %s of %s: %s  [102]"%(day_num, given_month_name, day_title))
-                            scrape_days_scores(driver)
+                            if verbose:
+                                print("this data was taken from the %s of %s: %s  [102]"%(day_num, given_month_name, day_title))
+                            scrape_days_scores(driver, verbose)
                             if int(day_title[:2]) == 1:
                                 break
                         except NoSuchElementException:
-                            print("Stopped at " + day.text + "with NoSuchElementException [102]")
+                            if verbose:
+                                print("Stopped at " + day.text + "with NoSuchElementException [102]")
                             break
                         except ElementClickInterceptedException:
-                            print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [102]"%(r,c))
+                            if verbose:
+                                print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [102]"%(r,c))
                             continue
                         sleep(2)
             driver.close()
@@ -139,7 +156,8 @@ def get_scores_per_month(given_month):
         #find today's coordinates
         row, collumn = 1,1
         for day in month:
-            print("Parsing day %s of current month [201]"%(day.text))
+            if verbose:
+                print("Parsing day %s of current month [201]"%(day.text))
             if day.text == str(date.today())[-2:]:                              #change to whatever you want to search (MUST BE STRING!!!)
                 print("Found todays date (" + day.text + ") at row %i, collumn %i [201]"%(row,collumn))
                 break
@@ -148,29 +166,36 @@ def get_scores_per_month(given_month):
                 row+=1
                 collumn = 1;
         #circle the calendar 
-        print("starting to circle the calendar [201]")
+        if verbose:
+            print("starting to circle the calendar [201]")
         for r in range(row,0,-1):
             if r == row:                                                        #when on the row where today is, start from today
                 for c in range(collumn,0,-1):
                     try:
-                        print("New Iteration    row: %i collumn %i [201]"%(r,c))
+                        if verbose:
+                            print("New Iteration    row: %i collumn %i [201]"%(r,c))
                         calendar.click()
-                        print("calendar clicked [201]")
+                        if verbose:
+                            print("calendar clicked [201]")
                         day_xpath = '//*[@id="ui-datepicker-div"]/table/tbody/tr['+str(r)+']/td['+str(c)+']/a'
                         day = driver.find_element_by_xpath(day_xpath)
                         day_num = day.text
                         day.click()
-                        print("clicked day %s [201] (everything that happens from now on will be on this day's page)"%(day_num))
+                        if verbose:
+                            print("clicked day %s [201] (everything that happens from now on will be on this day's page)"%(day_num))
                         day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
-                        print("this data was taken from the %s of current month: %s  [201]"%(day_num, day_title))
-                        scrape_days_scores(driver)
+                        if verbose:
+                            print("this data was taken from the %s of current month: %s  [201]"%(day_num, day_title))
+                        scrape_days_scores(driver, verbose)
                         if int(day_title[:2]) == 1:
                             break
                     except NoSuchElementException:
-                        print("Stopped at " + day.text + "with NoSuchElementException [201]")
+                        if verbose:
+                            print("Stopped at " + day.text + "with NoSuchElementException [201]")
                         break
                     except ElementClickInterceptedException:
-                        print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [201]"%(r,c))
+                        if verbose:
+                            print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [201]"%(r,c))
                         continue
                     sleep(7)
                     """
@@ -189,24 +214,30 @@ def get_scores_per_month(given_month):
             else:                                                               #when on every other row, start from the end (7th collumn)
                 for c in range(7,0,-1):
                     try:
-                        print("New Iteration    row: %i collumn %i [202]"%(r,c))
+                        if verbose:
+                            print("New Iteration    row: %i collumn %i [202]"%(r,c))
                         calendar.click()
-                        print("calendar clicked [202]")
+                        if verbose:
+                            print("calendar clicked [202]")
                         day_xpath = '//*[@id="ui-datepicker-div"]/table/tbody/tr['+str(r)+']/td['+str(c)+']/a'
                         day = driver.find_element_by_xpath(day_xpath)
                         day_num = day.text
                         day.click()
-                        print("clicked day %s [202] (everything that happens from now on will be on this day's page)"%(day_num))
+                        if verbose:
+                            print("clicked day %s [202] (everything that happens from now on will be on this day's page)"%(day_num))
                         day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
-                        print("this data was taken from the %s of current month: %s  [202]"%(day_num, day_title))
-                        scrape_days_scores(driver)
+                        if verbose:
+                            print("this data was taken from the %s of current month: %s  [202]"%(day_num, day_title))
+                        scrape_days_scores(driver, verbose)
                         if int(day_title[:2]) == 1:
                             break
                     except NoSuchElementException:
-                        print("Stopped at " + day.text + "with NoSuchElementException [202]")
+                        if verbose:
+                            print("Stopped at " + day.text + "with NoSuchElementException [202]")
                         break
                     except ElementClickInterceptedException:
-                        print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [202]"%(r,c))
+                        if verbose:
+                            print("Element not clickable at row %s, collumn %s for some reason, usually the page hasn't fully loaded yet [202]"%(r,c))
                         continue
                     sleep(7)
                     """
