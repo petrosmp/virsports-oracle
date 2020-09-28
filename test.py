@@ -11,7 +11,7 @@ def get_scores_per_month(given_month):
     from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
     from time import sleep
     from datetime import date
-    from scraper import scrape_days_scores
+    from detect import scrape_days_scores
 
     today_month = int(str(date.today())[5:7])
     if given_month > today_month:                                       #check if given month is valid
@@ -160,7 +160,7 @@ def get_scores_per_month(given_month):
                         day = driver.find_element_by_xpath(day_xpath)
                         day_num = day.text
                         day.click()
-                        print("clicled day %s [201] (everything that happens from now on will be on this day's page)"%(day_num))
+                        print("clicked day %s [201] (everything that happens from now on will be on this day's page)"%(day_num))
                         day_title = driver.find_element_by_xpath('//*[@id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_rXASPFw5Drqj"]/div/div[2]/div/div/div/div[1]/div/div/div[1]/div[1]/div[2]').text
                         print("this data was taken from the %s of current month: %s  [201]"%(day_num, day_title))
                         scrape_days_scores(driver)
